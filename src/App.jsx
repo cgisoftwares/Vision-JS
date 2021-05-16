@@ -24,16 +24,17 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="nav justify-content-center">
-          <h1 className="my-3 fw-bold text-white">Captura de Imagem</h1>
+
+        <header className="nav justify-content-start align-items-center">
+          <h1 className="my-0 fs-5 fw-bold text-white mx-4">Vision</h1>
         </header>
 
         <section className="container-fluid">
-          <div className="row my-4 gap-4 d-flex justify-content-center">
-            <div className="box card col-lg-4 justify-content-between shadow-sm">
-              <h2 className="card-title fs-4 text-primary-2 text-center mb-3">
+          <div className="row h-100 gap-1 d-flex align-items-between my-3 mx-1">
+            <div className="box card mh-xl-75 col-lg-5 justify-content-between shadow-sm">
+              <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
                 Exibição
-              </h2>
+              </h3>
               <WebcamComponent
                 updateImages={this.handleImageChange}
                 images={this.state.images}
@@ -41,21 +42,30 @@ class App extends React.Component {
               <div className="p-1 d-flex align-items-end justify-content-center mt-4" />
             </div>
 
-            <div className="box card col-lg-3 shadow-sm">
-              <h2 className="card-title fs-4 text-primary-2 text-center mb-3">
-                Imagens Capturadas
-              </h2>
-              <div className="p-1 results">
-                <ScreenshotList images={this.state.images}>
-                  images
+            <div className="col d-flex flex-column gap-4">
+              <div className="box card col shadow-sm">
+                <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
+                  Imagens Capturadas
+              </h3>
+                <div className="p-1 images">
+                  <ScreenshotList images={this.state.images}>
+                    images
                 </ScreenshotList>
+                </div>
+              </div>
+              <div className="box model card col d-flex justify-content-between shadow-sm ">
+                <h3 className="card-title fs-4 text-primary-2 text-center mb-4">Modelo</h3>
+                <div className="d-flex flex-lg-row gap-4">
+                  <button className="col btn shadow">Treinar</button>
+                  <button className="col btn shadow">Baixar</button>
+                </div>
               </div>
             </div>
 
             <div className="box card col-lg-4 justify-content-between shadow-sm">
-              <h2 className="card-title fs-4 text-primary-2 text-center mb-3">
+              <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
                 Rotulação
-              </h2>
+              </h3>
               <img
                 className="printscreen"
                 alt="Printscreen da câmera de vídeo"
@@ -63,10 +73,9 @@ class App extends React.Component {
               />
               <div className="p-1 d-flex align-items-end justify-content-center mt-4">
                 <input
-                  className="btn btn-warning shadow"
+                  className="btn shadow"
                   type="submit"
-                  value="Salvar seleção"
-                />
+                  value="Salvar seleção" />
               </div>
             </div>
           </div>

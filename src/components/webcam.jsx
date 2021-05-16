@@ -19,7 +19,7 @@ const WebcamCapture = (props) => {
         ref={webcamRef}
         screenshotFormat="image/jpeg"
       />
-      <button onClick={capture} className="btn btn-warning shadow mt-4">Capture photo</button>
+      <button onClick={capture} className="btn shadow mt-4">Capture photo</button>
     </>
   );
 };

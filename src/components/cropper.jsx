@@ -22,6 +22,23 @@ class Cropper extends React.Component {
     });
   };
 
+  rotateImage() {
+    let degrees = 90;
+    const canvas = document.createElement("canvas");
+    let context = canvas.getContext("2d");
+    let image = new Image();
+    image.src = this.props.img;
+
+    canvas.width = degrees % 180 === 0 ? image.width : image.height;
+    canvas.height = degrees % 180 === 0 ? image.height : image.width;
+
+    context.translate(canvas.width / 2, canvas.height / 2);
+    context.rotate((degrees * Math.PI) / 180);
+    context.drawImage(image, image.width / -2, image.height / -2);
+
+    this.props.updateSelectedImage(canvas.toDataURL());
+  }
+
   saveSelection() {
     let annotations = this.state.coordinates.map((coordinate) => {
       delete coordinate.id;
@@ -51,12 +68,21 @@ class Cropper extends React.Component {
           onDelete={this.deleteCoordinate}
         />
         <div className="p-1 d-flex align-items-end justify-content-center mt-4">
-          <input
+          <button
             className="btn btn-warning shadow"
             type="submit"
-            value="Salvar seleção"
+            value=""
             onClick={() => this.saveSelection()}
-          />
+          >
+            Salvar seleção
+          </button>
+
+          <button
+            className="btn btn-warning shadow"
+            onClick={() => this.rotateImage()}
+          >
+            Rodar imagem
+          </button>
         </div>
       </div>
     );

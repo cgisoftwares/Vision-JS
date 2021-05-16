@@ -24,11 +24,13 @@ class App extends React.Component {
     }));
   };
 
-  updateSelectedImage = (index) => {
-    this.setState((state) => ({
-      selectedImage: state.images[index],
+  updateSelectedImage = (image) => {
+    this.setState(() => ({
+      selectedImage: image,
     }));
   };
+
+
 
   render() {
     return (
@@ -79,7 +81,11 @@ class App extends React.Component {
               <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
                 Rotulação
               </h3>
-              <Cropper img={this.state.selectedImage} />
+              <Cropper
+                img={this.state.selectedImage}
+                updateSelectedImage={this.updateSelectedImage}
+              />
+              
             </div>
           </div>
         </section>

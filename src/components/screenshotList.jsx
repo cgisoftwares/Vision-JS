@@ -5,7 +5,12 @@ const ScreenshotList = (props) => {
     props.images &&
     props.images.map(function(img, i) {
       return (
-        <img key={i} alt="screenshot" src={img} />
+        <img
+          key={i}
+          onClick={() => props.updateSelectedImage(i)}
+          alt="screenshot"
+          src={img}
+        />
       );
     })
   );

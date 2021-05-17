@@ -76,17 +76,12 @@ class App extends React.Component {
                 </div>
               </div>
             </div>
+            
+            <Cropper
+              img={this.state.selectedImage}
+              updateSelectedImage={this.updateSelectedImage}
+            />
 
-            <div className="box card col-lg-4 shadow-sm">
-              <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
-                Rotulação
-              </h3>
-              <Cropper
-                img={this.state.selectedImage}
-                updateSelectedImage={this.updateSelectedImage}
-              />
-              
-            </div>
           </div>
         </section>
       </div>

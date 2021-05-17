@@ -1,10 +1,16 @@
 :root {
-  --white: rgb(233, 233, 233);
+  --white-2: rgb(233, 233, 233);
   --gray: #213f52;
+
+  --white: #EFEAE4;
+  --violet: #741AAC;
+  --red: #E43D40;
+  --green: #1DC690;
+  --yellow: #F9D030;
 }
 
 .App {
-  background-color: var(--white);
+  background-color: var(--white-2);
   height: 100vh;
 }
 
@@ -21,7 +27,7 @@ h3 {
 button,
 input.btn {
   background-color: var(--gray) !important;
-  color: var(--white) !important;
+  color: var(--white-2) !important;
 }
 
 .nav {
@@ -39,7 +45,7 @@ input.btn {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: var(--white);
+  background-color: var(--white-2);
   border-radius: 5%;
   padding: 1rem;
 }
@@ -51,6 +57,27 @@ input {
 .images img {
   margin: 1%;
   width: 30%;
+}
+
+button.white{
+  background-color: var(--white) !important;
+}
+
+button.violet{
+  width: 1rem;
+  background-color: var(--violet) !important;
+}
+
+button.red{
+  background-color: var(--red) !important;
+}
+
+button.green{
+  background-color: var(--green) !important;
+}
+
+button.yellow{
+  background-color: var(--yellow) !important;
 }
 
 .images::-webkit-scrollbar-track {

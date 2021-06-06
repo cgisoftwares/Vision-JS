@@ -60,29 +60,41 @@ class Cropper extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="box card col-lg-4 shadow-sm text-center d-flex flex-column justify-content-between align-items-between">
+        <h3 className="card-title fs-4 text-primary-2 mb-3">
+          Rotulação
+        </h3>
         <MultiCrops
           src={this.props.img}
           coordinates={this.state.coordinates}
           onChange={this.changeCoordinate}
           onDelete={this.deleteCoordinate}
         />
-        <div className="p-1 d-flex align-items-end justify-content-center mt-4">
-          <button
-            className="btn btn-warning shadow"
-            type="submit"
-            value=""
-            onClick={() => this.saveSelection()}
-          >
-            Salvar seleção
+        <div>
+          <div className="d-flex justify-content-around colors">
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 white" />
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 violet" />
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 red" />
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 green" />
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 yellow" />
+          </div>
+          <div className="p-1 d-flex justify-content-center mt-4">
+            <button
+              className="btn shadow me-4"
+              type="submit"
+              value=""
+              onClick={() => this.saveSelection()}
+            >
+              Salvar seleção
           </button>
 
-          <button
-            className="btn btn-warning shadow"
-            onClick={() => this.rotateImage()}
-          >
-            Rodar imagem
+            <button
+              className="btn shadow"
+              onClick={() => this.rotateImage()}
+            >
+              Rodar imagem
           </button>
+          </div>
         </div>
       </div>
     );

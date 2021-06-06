@@ -41,16 +41,11 @@ class App extends React.Component {
 
         <section className="container-fluid">
           <div className="row h-100 gap-1 d-flex align-items-between my-3 mx-1">
-            <div className="box card mh-xl-75 col-lg-5 justify-content-between shadow-sm">
-              <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
-                Exibição
-              </h3>
-              <WebcamComponent
-                updateImages={this.handleImageChange}
-                images={this.state.images}
-              />
-              <div className="p-1 d-flex align-items-end justify-content-center mt-4" />
-            </div>
+
+            <WebcamComponent
+              updateImages={this.handleImageChange}
+              images={this.state.images}
+            />
 
             <div className="col d-flex flex-column gap-4">
               <div className="box card col shadow-sm">
@@ -77,16 +72,11 @@ class App extends React.Component {
               </div>
             </div>
 
-            <div className="box card col-lg-4 shadow-sm">
-              <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
-                Rotulação
-              </h3>
-              <Cropper
-                img={this.state.selectedImage}
-                updateSelectedImage={this.updateSelectedImage}
-              />
-              
-            </div>
+            <Cropper
+              img={this.state.selectedImage}
+              updateSelectedImage={this.updateSelectedImage}
+            />
+
           </div>
         </section>
       </div>

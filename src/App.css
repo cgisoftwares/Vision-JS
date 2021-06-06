@@ -2,7 +2,7 @@
   --white: rgb(233, 233, 233);
   --gray: #213f52;
 
-  --white-200: #EFEAE4;
+  --beige: #EFEAE4;
   --violet: #741AAC;
   --red: #E43D40;
   --green: #1DC690;
@@ -60,7 +60,7 @@ input {
 }
 
 button.white{
-  background-color: var(--white-200) !important;
+  background-color: var(--beige) !important;
 }
 
 button.violet{

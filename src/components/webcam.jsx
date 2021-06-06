@@ -23,7 +23,6 @@ const WebcamCapture = (props) => {
         screenshotFormat="image/jpeg"
       />
       <div className="text-center">
-        <div className="p-1 d-flex align-items-end justify-content-center mt-4" />
         <button onClick={capture} className="btn shadow mt-4">Capturar imagem</button>
       </div>
     </div>

@@ -13,14 +13,20 @@ const WebcamCapture = (props) => {
   };
 
   return (
-    <>
+    <div className="box col-lg-5 card d-flex flex-column align-items-between mh-xl-75 justify-content-between shadow-sm">
+      <h3 className="card-title fs-4 text-primary-2 text-center mb-3">
+        Exibição
+      </h3>
       <Webcam
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
       />
-      <button onClick={capture} className="btn shadow mt-4">Capture photo</button>
-    </>
+      <div className="text-center">
+        <div className="p-1 d-flex align-items-end justify-content-center mt-4" />
+        <button onClick={capture} className="btn shadow mt-4">Capturar imagem</button>
+      </div>
+    </div>
   );
 };
 

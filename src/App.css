@@ -1,8 +1,8 @@
 :root {
-  --white-2: rgb(233, 233, 233);
+  --white: rgb(233, 233, 233);
   --gray: #213f52;
 
-  --white: #EFEAE4;
+  --white-200: #EFEAE4;
   --violet: #741AAC;
   --red: #E43D40;
   --green: #1DC690;
@@ -10,7 +10,7 @@
 }
 
 .App {
-  background-color: var(--white-2);
+  background-color: var(--white);
   height: 100vh;
 }
 
@@ -27,7 +27,7 @@ h3 {
 button,
 input.btn {
   background-color: var(--gray) !important;
-  color: var(--white-2) !important;
+  color: var(--white) !important;
 }
 
 .nav {
@@ -45,7 +45,7 @@ input.btn {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: var(--white-2);
+  background-color: var(--white);
   border-radius: 5%;
   padding: 1rem;
 }
@@ -60,7 +60,7 @@ input {
 }
 
 button.white{
-  background-color: var(--white) !important;
+  background-color: var(--white-200) !important;
 }
 
 button.violet{

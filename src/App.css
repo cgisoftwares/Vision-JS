@@ -6,6 +6,7 @@
   --red: #E43D40;
   --green: #1DC690;
   --yellow: #F9D030;
+  --colorCropper: red;
 }
 
 .App {
@@ -93,4 +94,8 @@ button.yellow{
 
 .images::-webkit-scrollbar-thumb {
   background-color: var(--blue);
+}
+
+.multiCrops div {
+  background: var(--colorCropper) !important;
 }

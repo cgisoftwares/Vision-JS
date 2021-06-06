@@ -9,7 +9,6 @@ class Cropper extends React.Component {
       coordinates: [],
     };
   }
-
   changeCoordinate = (coordinate, index, coordinates) => {
     this.setState({
       coordinates,
@@ -64,15 +63,17 @@ class Cropper extends React.Component {
         <h3 className="card-title fs-4 text-primary-2 mb-3">
           Rotulação
         </h3>
+        <div className="multiCrops">
         <MultiCrops
           src={this.props.img}
           coordinates={this.state.coordinates}
           onChange={this.changeCoordinate}
           onDelete={this.deleteCoordinate}
         />
+        </div>
         <div>
           <div className="d-flex justify-content-around colors">
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 white" />
+            <button onClick={this.props.onClick} className="shadow-sm border-0 rounded p-3 m-1 w-25 white" />
             <button className="shadow-sm border-0 rounded p-3 m-1 w-25 violet" />
             <button className="shadow-sm border-0 rounded p-3 m-1 w-25 red" />
             <button className="shadow-sm border-0 rounded p-3 m-1 w-25 green" />

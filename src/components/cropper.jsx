@@ -117,6 +117,14 @@ class Cropper extends React.Component {
     //TODO: send the selection object as request
   }
 
+  setImageBackgroundColor(color) {
+    this.cropsRef.current.container.childNodes.forEach((element) => {
+      if (element.localName == "img") {
+        element.style = ` -webkit-filter: opacity(.5) drop-shadow(0 0 0 ${color}) `
+      }
+    });
+  }
+
   render() {
     return (
       <div className="box card col-lg-4 shadow-sm text-center d-flex flex-column justify-content-between align-items-between">
@@ -165,6 +173,10 @@ class Cropper extends React.Component {
 
             <button className="btn shadow" onClick={() => this.rotateImage()}>
               Rodar imagem
+            </button>
+
+            <button className="btn shadow ms-4" onClick={() => this.setImageBackgroundColor(this.state.selectedColor)}>
+              Preencher imagem
             </button>
           </div>
         </div>

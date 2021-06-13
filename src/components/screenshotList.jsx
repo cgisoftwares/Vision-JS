@@ -7,9 +7,9 @@ const ScreenshotList = (props) => {
       return (
         <img
           key={i}
-          onClick={() => props.updateSelectedImage(props.images[i])}
+          onClick={() => props.updateSelectedImage(props.images[i], i)}
           alt="screenshot"
-          src={img}
+          src={img.src}
         />
       );
     })

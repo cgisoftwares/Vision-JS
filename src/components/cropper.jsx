@@ -11,21 +11,41 @@ class Cropper extends React.Component {
     this.state = {
       coordinateLabel: "",
       focusedCoordinate: "",
-      coordinates: [],
-      selectedColor: ""
+      coordinates: props.imageAndCoordinates.coordinates,
+      selectedColor: "#8c8c8c",
     };
 
-    this.gray = '#e9e9e9';
-    this.violet = '#741AAC';
-    this.red = '#E43D40';
-    this.green = '#1DC690';
-    this.yellow = '#f9d030';
+    this.gray = "#8c8c8c";
+    this.violet = "#741AAC";
+    this.red = "#E43D40";
+    this.green = "#1DC690";
+    this.yellow = "#f9d030";
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      this.setState({
+        coordinates: this.props.imageAndCoordinates.coordinates,
+      });
+    } else if (prevState !== this.state.coordinates) {
+      let actualCoordinates = [];
+
+      this.cropsRef.current.container.childNodes.forEach((element) => {
+        if (element.localName !== "img") {
+          actualCoordinates.push(element);
+        }
+      });
+
+      actualCoordinates.forEach((element, index) => {
+        element.childNodes[0].innerHTML = this.state.coordinates[index].label;
+      });
+    }
   }
 
   changeCoordinate = (coordinate, index, coordinates) => {
     this.cropsRef.current.container.childNodes.forEach((element) => {
       if (element.localName !== "img") {
-        element.onclick = () => this.handleCropClick(element, element.childNodes[0].innerHTML);
+        element.onclick = () => this.handleCropClick(element);
       }
     });
 
@@ -46,7 +66,7 @@ class Cropper extends React.Component {
     const canvas = document.createElement("canvas");
     let context = canvas.getContext("2d");
     let image = new Image();
-    image.src = this.props.img;
+    image.src = this.props.imageAndCoordinates.src;
 
     canvas.width = degrees % 180 === 0 ? image.width : image.height;
     canvas.height = degrees % 180 === 0 ? image.height : image.width;
@@ -55,7 +75,13 @@ class Cropper extends React.Component {
     context.rotate((degrees * Math.PI) / 180);
     context.drawImage(image, image.width / -2, image.height / -2);
 
-    this.props.updateSelectedImage(canvas.toDataURL());
+    this.props.updateSelectedImage(
+      {
+        src: canvas.toDataURL(),
+        coordinates: this.state.coordinates,
+      },
+      this.imageAndCoordinates.index
+    );
   }
 
   handleCurrentNameChange = (event) => {
@@ -67,7 +93,7 @@ class Cropper extends React.Component {
     this.setState({ focusedCoordinate, coordinateLabel: newLabel });
   };
 
-  handleCropClick = (element, index) => { 
+  handleCropClick = (element) => {
     element.style.background = this.state.selectedColor;
     this.setState({
       focusedCoordinate: element,
@@ -79,48 +105,54 @@ class Cropper extends React.Component {
 
   handleColorChange = (color) => {
     let selectedColor = this.state.selectedColor;
-    if(selectedColor !== color){
+    if (selectedColor !== color) {
       selectedColor = color;
-      this.setState({selectedColor}); 
-    } else{
-      selectedColor = '#8c8c8c';
-      this.setState({selectedColor});
+      this.setState({ selectedColor });
     }
   };
 
   saveSelection() {
-    let coordinates = this.state.coordinates;
-    let annotations = coordinates.map((coordinate) => {
-      const { id, label, ...annotations } = coordinate;
-
-      return annotations;
-    });
-
-    let labels = coordinates.map((coordinate) => {
-      return coordinate.label;
-    });
-
-    let uniqueLabels = Array.from(new Set(labels));
-
-    let selection = {
-      classes: uniqueLabels,
-      data: [
+    if (this.state.coordinates) {
+      this.props.updateSelectedImage(
         {
-          image: this.props.img,
-          annotations,
+          src: this.props.imageAndCoordinates.src,
+          coordinates: this.state.coordinates,
         },
-      ],
-    };
+        this.props.imageAndCoordinates.index
+      );
 
-    console.log(selection);
+      let coordinates = this.state.coordinates;
 
-    //TODO: send the selection object as request
+      let annotations = coordinates.map((coordinate) => {
+        const { id, label, ...annotations } = coordinate;
+
+        return annotations;
+      });
+
+      let labels = coordinates.map((coordinate) => {
+        return coordinate.label;
+      });
+
+      let uniqueLabels = Array.from(new Set(labels));
+
+      let selection = {
+        classes: uniqueLabels,
+        data: [
+          {
+            image: this.props.imageAndCoordinates.src,
+            annotations,
+          },
+        ],
+      };
+      console.log(selection);
+      //TODO: send the selection object as a request
+    }
   }
 
   setImageBackgroundColor(color) {
     this.cropsRef.current.container.childNodes.forEach((element) => {
-      if (element.localName == "img") {
-        element.style = ` -webkit-filter: opacity(.5) drop-shadow(0 0 0 ${color}) `
+      if (element.localName === "img") {
+        element.style = ` -webkit-filter: opacity(.5) drop-shadow(0 0 0 ${color}) `;
       }
     });
   }
@@ -130,7 +162,7 @@ class Cropper extends React.Component {
       <div className="box card col-lg-4 shadow-sm text-center d-flex flex-column justify-content-between align-items-between">
         <h3 className="card-title fs-4 text-primary-2 mb-3">Rotulação</h3>
         <MultiCrops
-          src={this.props.img}
+          src={this.props.imageAndCoordinates.src}
           coordinates={this.state.coordinates}
           onChange={this.changeCoordinate}
           onDelete={this.deleteCoordinate}
@@ -145,21 +177,31 @@ class Cropper extends React.Component {
         />
         <div>
           <div className="d-flex justify-content-around colors">
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
-            style={{backgroundColor: this.gray}}
-            onClick={() => this.handleColorChange(this.gray)}/>
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
-            style={{backgroundColor: this.violet}}
-            onClick={() => this.handleColorChange(this.violet)}/>
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
-            style={{backgroundColor: this.red}}
-            onClick={() => this.handleColorChange(this.red)}/>
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
-            style={{backgroundColor: this.green}}
-            onClick={() => this.handleColorChange(this.green)}/>
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
-            style={{backgroundColor: this.yellow}}
-            onClick={() => this.handleColorChange(this.yellow)}/>
+            <button
+              className="shadow-sm border-0 rounded p-3 m-1 w-25"
+              style={{ backgroundColor: this.gray }}
+              onClick={() => this.handleColorChange(this.gray)}
+            />
+            <button
+              className="shadow-sm border-0 rounded p-3 m-1 w-25"
+              style={{ backgroundColor: this.violet }}
+              onClick={() => this.handleColorChange(this.violet)}
+            />
+            <button
+              className="shadow-sm border-0 rounded p-3 m-1 w-25"
+              style={{ backgroundColor: this.red }}
+              onClick={() => this.handleColorChange(this.red)}
+            />
+            <button
+              className="shadow-sm border-0 rounded p-3 m-1 w-25"
+              style={{ backgroundColor: this.green }}
+              onClick={() => this.handleColorChange(this.green)}
+            />
+            <button
+              className="shadow-sm border-0 rounded p-3 m-1 w-25"
+              style={{ backgroundColor: this.yellow }}
+              onClick={() => this.handleColorChange(this.yellow)}
+            />
           </div>
           <div className="p-1 d-flex justify-content-center mt-4">
             <button
@@ -175,7 +217,12 @@ class Cropper extends React.Component {
               Rodar imagem
             </button>
 
-            <button className="btn shadow ms-4" onClick={() => this.setImageBackgroundColor(this.state.selectedColor)}>
+            <button
+              className="btn shadow ms-4"
+              onClick={() =>
+                this.setImageBackgroundColor(this.state.selectedColor)
+              }
+            >
               Preencher imagem
             </button>
           </div>

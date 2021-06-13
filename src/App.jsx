@@ -10,8 +10,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      selectedImage: null,
-      images: [],
+      selectedImage: {},
+      imagesAndCoordinates: [],
     };
 
     this.handleImageChange.bind(this);
@@ -20,17 +20,23 @@ class App extends React.Component {
 
   handleImageChange = (image) => {
     this.setState((state) => ({
-      images: [...state.images, image],
+      imagesAndCoordinates: [
+        ...state.imagesAndCoordinates,
+        { src: image, coordinates: [] },
+      ],
     }));
   };
 
-  updateSelectedImage = (image) => {
-    this.setState(() => ({
+  updateSelectedImage = (image, index) => {
+    image.index = index;
+    let imagesAndCoordinates = this.state.imagesAndCoordinates;
+    imagesAndCoordinates[index] = image;
+
+    this.setState({
+      imagesAndCoordinates,
       selectedImage: image,
-    }));
+    });
   };
-
-
 
   render() {
     return (
@@ -41,10 +47,9 @@ class App extends React.Component {
 
         <section className="container-fluid">
           <div className="row h-100 gap-1 d-flex align-items-between my-3 mx-1">
-
             <WebcamComponent
               updateImages={this.handleImageChange}
-              images={this.state.images}
+              images={this.state.imagesAndCoordinates}
             />
 
             <div className="col d-flex flex-column gap-4">
@@ -54,7 +59,7 @@ class App extends React.Component {
                 </h3>
                 <div className="p-1 images">
                   <ScreenshotList
-                    images={this.state.images}
+                    images={this.state.imagesAndCoordinates}
                     updateSelectedImage={this.updateSelectedImage}
                   >
                     images
@@ -73,10 +78,9 @@ class App extends React.Component {
             </div>
 
             <Cropper
-              img={this.state.selectedImage}
+              imageAndCoordinates={this.state.selectedImage}
               updateSelectedImage={this.updateSelectedImage}
             />
-
           </div>
         </section>
       </div>

@@ -5,12 +5,24 @@ class Cropper extends React.Component {
   constructor(props) {
     super(props);
 
+    this.cropsRef = React.createRef();
+    this.labelInputRef = React.createRef();
+
     this.state = {
+      coordinateLabel: "",
+      focusedCoordinate: "",
       coordinates: [],
     };
   }
 
   changeCoordinate = (coordinate, index, coordinates) => {
+    this.cropsRef.current.container.childNodes.forEach((element) => {
+      if (element.localName !== "img") {
+        element.onclick = () => this.handleCropClick(element, element.childNodes[0].innerHTML);
+      }
+    });
+
+    coordinates[index].label = this.state.coordinateLabel;
     this.setState({
       coordinates,
     });
@@ -39,14 +51,40 @@ class Cropper extends React.Component {
     this.props.updateSelectedImage(canvas.toDataURL());
   }
 
-  saveSelection() {
-    let annotations = this.state.coordinates.map((coordinate) => {
-      delete coordinate.id;
-      return { ...coordinate };
+  handleCurrentNameChange = (event) => {
+    let newLabel = event.target.value;
+    let focusedCoordinate = this.state.focusedCoordinate;
+    if (focusedCoordinate) {
+      focusedCoordinate.childNodes[0].innerHTML = newLabel;
+    }
+    this.setState({ focusedCoordinate, coordinateLabel: newLabel });
+  };
+
+  handleCropClick = (element, index) => {
+    this.setState({
+      focusedCoordinate: element,
+      coordinateLabel: element.childNodes[0].innerHTML,
     });
 
+    this.labelInputRef.current.focus();
+  };
+
+  saveSelection() {
+    let coordinates = this.state.coordinates;
+    let annotations = coordinates.map((coordinate) => {
+      const { id, label, ...annotations } = coordinate;
+
+      return annotations;
+    });
+
+    let labels = coordinates.map((coordinate) => {
+      return coordinate.label;
+    });
+
+    let uniqueLabels = Array.from(new Set(labels));
+
     let selection = {
-      classes: ["DEFEITO", "MANCHA"],
+      classes: uniqueLabels,
       data: [
         {
           image: this.props.img,
@@ -55,20 +93,28 @@ class Cropper extends React.Component {
       ],
     };
 
+    console.log(selection);
+
     //TODO: send the selection object as request
   }
 
   render() {
     return (
       <div className="box card col-lg-4 shadow-sm text-center d-flex flex-column justify-content-between align-items-between">
-        <h3 className="card-title fs-4 text-primary-2 mb-3">
-          Rotulação
-        </h3>
+        <h3 className="card-title fs-4 text-primary-2 mb-3">Rotulação</h3>
         <MultiCrops
           src={this.props.img}
           coordinates={this.state.coordinates}
           onChange={this.changeCoordinate}
           onDelete={this.deleteCoordinate}
+          ref={this.cropsRef}
+        />
+
+        <input
+          type="text"
+          value={this.state.coordinateLabel}
+          onChange={this.handleCurrentNameChange}
+          ref={this.labelInputRef}
         />
         <div>
           <div className="d-flex justify-content-around colors">
@@ -86,14 +132,11 @@ class Cropper extends React.Component {
               onClick={() => this.saveSelection()}
             >
               Salvar seleção
-          </button>
+            </button>
 
-            <button
-              className="btn shadow"
-              onClick={() => this.rotateImage()}
-            >
+            <button className="btn shadow" onClick={() => this.rotateImage()}>
               Rodar imagem
-          </button>
+            </button>
           </div>
         </div>
       </div>

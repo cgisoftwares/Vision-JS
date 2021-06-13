@@ -94,3 +94,9 @@ button.yellow{
 .images::-webkit-scrollbar-thumb {
   background-color: var(--blue);
 }
+
+.rmc-number{
+  width: fit-content !important;
+  height: fit-content !important;
+  word-break: break-all;
+}

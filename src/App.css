@@ -1,11 +1,7 @@
 :root {
   --white: #fff;
-  --gray: rgb(233, 233, 233);
+  --gray: #e9e9e9;
   --blue: #213f52;
-  --violet: #741AAC;
-  --red: #E43D40;
-  --green: #1DC690;
-  --yellow: #F9D030;
 }
 
 .App {
@@ -23,8 +19,7 @@ h3 {
   color: var(--blue);
 }
 
-button,
-input.btn {
+.btn {
   background-color: var(--blue) !important;
   color: var(--gray) !important;
 }
@@ -56,27 +51,6 @@ input {
 .images img {
   margin: 1%;
   width: 30%;
-}
-
-button.white{
-  background-color: var(--gray) !important;
-}
-
-button.violet{
-  width: 1rem;
-  background-color: var(--violet) !important;
-}
-
-button.red{
-  background-color: var(--red) !important;
-}
-
-button.green{
-  background-color: var(--green) !important;
-}
-
-button.yellow{
-  background-color: var(--yellow) !important;
 }
 
 .images::-webkit-scrollbar-track {

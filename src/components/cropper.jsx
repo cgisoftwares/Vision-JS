@@ -12,7 +12,14 @@ class Cropper extends React.Component {
       coordinateLabel: "",
       focusedCoordinate: "",
       coordinates: [],
+      selectedColor: ""
     };
+
+    this.gray = '#e9e9e9';
+    this.violet = '#741AAC';
+    this.red = '#E43D40';
+    this.green = '#1DC690';
+    this.yellow = '#f9d030';
   }
 
   changeCoordinate = (coordinate, index, coordinates) => {
@@ -60,13 +67,25 @@ class Cropper extends React.Component {
     this.setState({ focusedCoordinate, coordinateLabel: newLabel });
   };
 
-  handleCropClick = (element, index) => {
+  handleCropClick = (element, index) => { 
+    element.style.background = this.state.selectedColor;
     this.setState({
       focusedCoordinate: element,
       coordinateLabel: element.childNodes[0].innerHTML,
     });
 
     this.labelInputRef.current.focus();
+  };
+
+  handleColorChange = (color) => {
+    let selectedColor = this.state.selectedColor;
+    if(selectedColor !== color){
+      selectedColor = color;
+      this.setState({selectedColor}); 
+    } else{
+      selectedColor = '#8c8c8c';
+      this.setState({selectedColor});
+    }
   };
 
   saveSelection() {
@@ -118,11 +137,21 @@ class Cropper extends React.Component {
         />
         <div>
           <div className="d-flex justify-content-around colors">
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 white" />
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 violet" />
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 red" />
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 green" />
-            <button className="shadow-sm border-0 rounded p-3 m-1 w-25 yellow" />
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
+            style={{backgroundColor: this.gray}}
+            onClick={() => this.handleColorChange(this.gray)}/>
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
+            style={{backgroundColor: this.violet}}
+            onClick={() => this.handleColorChange(this.violet)}/>
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
+            style={{backgroundColor: this.red}}
+            onClick={() => this.handleColorChange(this.red)}/>
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
+            style={{backgroundColor: this.green}}
+            onClick={() => this.handleColorChange(this.green)}/>
+            <button className="shadow-sm border-0 rounded p-3 m-1 w-25" 
+            style={{backgroundColor: this.yellow}}
+            onClick={() => this.handleColorChange(this.yellow)}/>
           </div>
           <div className="p-1 d-flex justify-content-center mt-4">
             <button

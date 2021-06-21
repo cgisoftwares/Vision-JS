@@ -27,17 +27,19 @@ class Cropper extends React.Component {
       this.setState({
         coordinates: this.props.imageAndCoordinates.coordinates,
       });
-    } else if (prevState !== this.state.coordinates) {
-      let actualCoordinates = [];
+    } else if (prevState.coordinates !== this.state.coordinates) {
+      let cropBoxes = [];
 
       this.cropsRef.current.container.childNodes.forEach((element) => {
         if (element.localName !== "img") {
-          actualCoordinates.push(element);
+          cropBoxes.push(element);
         }
       });
 
-      actualCoordinates.forEach((element, index) => {
-        element.childNodes[0].innerHTML = this.state.coordinates[index].label;
+      cropBoxes.forEach((element, index) => {
+        if (this.state.coordinates[index].label) {
+          element.childNodes[0].innerHTML = this.state.coordinates[index].label;
+        }
       });
     }
   }
@@ -49,7 +51,6 @@ class Cropper extends React.Component {
       }
     });
 
-    coordinates[index].label = this.state.coordinateLabel;
     this.setState({
       coordinates,
     });
@@ -80,28 +81,55 @@ class Cropper extends React.Component {
         src: canvas.toDataURL(),
         coordinates: this.state.coordinates,
       },
-      this.imageAndCoordinates.index
+      this.props.imageAndCoordinates.index
     );
   }
 
   handleCurrentNameChange = (event) => {
     let newLabel = event.target.value;
     let focusedCoordinate = this.state.focusedCoordinate;
-    if (focusedCoordinate) {
+    let coordinates = this.state.coordinates;
+    if (focusedCoordinate?.childNodes) {
       focusedCoordinate.childNodes[0].innerHTML = newLabel;
+
+      let coordinateIndex = this.getCurrentCoordinateIndex(focusedCoordinate);
+      coordinates[coordinateIndex].label = newLabel;
     }
-    this.setState({ focusedCoordinate, coordinateLabel: newLabel });
+
+    this.setState({
+      coordinates,
+      focusedCoordinate,
+      coordinateLabel: newLabel,
+    });
   };
 
   handleCropClick = (element) => {
+    let coordinateIndex = this.getCurrentCoordinateIndex(element);
+    let coordinates = this.state.coordinates;
+    coordinates[coordinateIndex].label = element.childNodes[0].innerHTML;
+
     element.style.background = this.state.selectedColor;
     this.setState({
+      coordinates,
       focusedCoordinate: element,
       coordinateLabel: element.childNodes[0].innerHTML,
     });
 
     this.labelInputRef.current.focus();
   };
+
+  getCurrentCoordinateIndex(element) {
+    let siblings = [];
+
+    if (element.parentElement?.childNodes) {
+      element.parentElement.childNodes.forEach((sibling) =>
+        siblings.push(sibling)
+      );
+    }
+    siblings.shift();
+
+    return siblings.indexOf(element);
+  }
 
   handleColorChange = (color) => {
     let selectedColor = this.state.selectedColor;
@@ -124,27 +152,16 @@ class Cropper extends React.Component {
       let coordinates = this.state.coordinates;
 
       let annotations = coordinates.map((coordinate) => {
-        const { id, label, ...annotations } = coordinate;
+        const { id, ...annotations } = coordinate;
 
         return annotations;
       });
 
-      let labels = coordinates.map((coordinate) => {
-        return coordinate.label;
-      });
-
-      let uniqueLabels = Array.from(new Set(labels));
-
       let selection = {
-        classes: uniqueLabels,
-        data: [
-          {
-            image: this.props.imageAndCoordinates.src,
-            annotations,
-          },
-        ],
+        annotations,
+        image: this.props.imageAndCoordinates.src,
       };
-      console.log(selection);
+      console.log(JSON.stringify(selection));
       //TODO: send the selection object as a request
     }
   }

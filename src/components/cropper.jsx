@@ -87,8 +87,7 @@ class Cropper extends React.Component {
 
   handleCurrentNameChange = (event) => {
     let newLabel = event.target.value;
-    let focusedCoordinate = this.state.focusedCoordinate;
-    let coordinates = this.state.coordinates;
+    let { focusedCoordinate, coordinates } = this.state;
     if (focusedCoordinate?.childNodes) {
       focusedCoordinate.childNodes[0].innerHTML = newLabel;
 
@@ -105,10 +104,10 @@ class Cropper extends React.Component {
 
   handleCropClick = (element) => {
     let coordinateIndex = this.getCurrentCoordinateIndex(element);
-    let coordinates = this.state.coordinates;
+    let { coordinates, selectedColor } = this.state;
     coordinates[coordinateIndex].label = element.childNodes[0].innerHTML;
 
-    element.style.background = this.state.selectedColor;
+    element.style.background = selectedColor;
     this.setState({
       coordinates,
       focusedCoordinate: element,
@@ -140,16 +139,15 @@ class Cropper extends React.Component {
   };
 
   saveSelection() {
-    if (this.state.coordinates) {
+    let coordinates = this.state.coordinates;
+    if (coordinates) {
       this.props.updateSelectedImage(
         {
           src: this.props.imageAndCoordinates.src,
-          coordinates: this.state.coordinates,
+          coordinates,
         },
         this.props.imageAndCoordinates.index
       );
-
-      let coordinates = this.state.coordinates;
 
       let annotations = coordinates.map((coordinate) => {
         const { id, ...annotations } = coordinate;

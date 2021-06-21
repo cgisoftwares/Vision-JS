@@ -22,7 +22,6 @@ class Cropper extends React.Component {
     this.cropsRef = React.createRef();
     this.labelInputRef = React.createRef();
 
-    this.buttonRef = React.createRef();
     this.buttonGray = React.createRef();
     this.buttonViolet = React.createRef();
     this.buttonRed = React.createRef();

@@ -10,7 +10,8 @@
     "react-multi-crops": "0.0.10",
     "react-scripts": "4.0.3",
     "react-webcam": "^5.2.3",
-    "sass": "^1.32.13"
+    "sass": "^1.32.13",
+    "styled-components": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,20 @@
 import React from "react";
 import MultiCrops from "react-multi-crops";
 
+const buttonTheme = {
+  colors: {
+    gray: "#8c8c8c",
+    violet: "#741AAC",
+    red: "#E43D40",
+    green: "#1DC690",
+    yellow: "#f9d030",
+    buttonBorder: ""
+  },
+  selectedBorder: '3px solid #000',
+  defaultBorder: '',
+  active: false
+}
+
 class Cropper extends React.Component {
   constructor(props) {
     super(props);
@@ -8,18 +22,20 @@ class Cropper extends React.Component {
     this.cropsRef = React.createRef();
     this.labelInputRef = React.createRef();
 
+    this.buttonRef = React.createRef();
+    this.buttonGray = React.createRef();
+    this.buttonViolet = React.createRef();
+    this.buttonRed = React.createRef();
+    this.buttonGreen = React.createRef();
+    this.buttonYellow = React.createRef();
+
     this.state = {
       coordinateLabel: "",
       focusedCoordinate: "",
       coordinates: props.imageAndCoordinates.coordinates,
       selectedColor: "#8c8c8c",
+      selectedButton: ""
     };
-
-    this.gray = "#8c8c8c";
-    this.violet = "#741AAC";
-    this.red = "#E43D40";
-    this.green = "#1DC690";
-    this.yellow = "#f9d030";
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -135,8 +151,24 @@ class Cropper extends React.Component {
     if (selectedColor !== color) {
       selectedColor = color;
       this.setState({ selectedColor });
+    } else {
+      selectedColor = "#8c8c8c";
+      this.setState({ selectedColor });
     }
   };
+
+  handleButton = (color) => {
+    let active = buttonTheme.active;
+    let selectedButton = this.buttonGray.current;
+    if(active === false){
+      selectedButton.style.border = buttonTheme.selectedBorder;
+      buttonTheme.active = true
+    }else{
+      selectedButton.style.border = buttonTheme.defaultBorder;
+      buttonTheme.active = false
+    }
+    this.handleColorChange(color);
+  }
 
   saveSelection() {
     let coordinates = this.state.coordinates;
@@ -183,40 +215,42 @@ class Cropper extends React.Component {
           onDelete={this.deleteCoordinate}
           ref={this.cropsRef}
         />
-
-        <input
-          type="text"
-          value={this.state.coordinateLabel}
-          onChange={this.handleCurrentNameChange}
-          ref={this.labelInputRef}
-        />
         <div>
+          <div className="col-12 p-1 mb-1">
+            <input
+              type="text"
+              className="col-12"
+              value={this.state.coordinateLabel}
+              onChange={this.handleCurrentNameChange}
+              ref={this.labelInputRef}
+            />
+          </div>
           <div className="d-flex justify-content-around colors">
-            <button
-              className="shadow-sm border-0 rounded p-3 m-1 w-25"
-              style={{ backgroundColor: this.gray }}
-              onClick={() => this.handleColorChange(this.gray)}
-            />
-            <button
-              className="shadow-sm border-0 rounded p-3 m-1 w-25"
-              style={{ backgroundColor: this.violet }}
-              onClick={() => this.handleColorChange(this.violet)}
-            />
-            <button
-              className="shadow-sm border-0 rounded p-3 m-1 w-25"
-              style={{ backgroundColor: this.red }}
-              onClick={() => this.handleColorChange(this.red)}
-            />
-            <button
-              className="shadow-sm border-0 rounded p-3 m-1 w-25"
-              style={{ backgroundColor: this.green }}
-              onClick={() => this.handleColorChange(this.green)}
-            />
-            <button
-              className="shadow-sm border-0 rounded p-3 m-1 w-25"
-              style={{ backgroundColor: this.yellow }}
-              onClick={() => this.handleColorChange(this.yellow)}
-            />
+
+            <button className="shadow-sm rounded p-3 m-1 w-25"
+              id="gray"
+              ref={this.buttonGray}
+              style={{ backgroundColor: buttonTheme.colors.gray }}
+              onClick={() => this.handleButton(buttonTheme.colors.gray)} />
+
+            <button className="shadow-sm rounded p-3 m-1 w-25"
+              id="violet"
+              ref={this.buttonViolet}
+              style={{ backgroundColor: buttonTheme.colors.violet }}
+              onClick={() => this.handleColorChange(buttonTheme.colors.violet)} />
+
+            <button className="shadow-sm rounded p-3 m-1 w-25"
+              style={{ backgroundColor: buttonTheme.colors.red }}
+              onClick={() => this.handleColorChange(buttonTheme.colors.red)} />
+
+            <button className="shadow-sm rounded p-3 m-1 w-25"
+              style={{ backgroundColor: buttonTheme.colors.green }}
+              onClick={() => this.handleColorChange(buttonTheme.colors.green)} />
+
+            <button className="shadow-sm rounded p-3 m-1 w-25"
+              style={{ backgroundColor: buttonTheme.colors.yellow }}
+              onClick={() => this.handleColorChange(buttonTheme.colors.yellow)} />
+
           </div>
           <div className="p-1 d-flex justify-content-center mt-4">
             <button
